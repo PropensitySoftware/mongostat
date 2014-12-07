@@ -1,0 +1,67 @@
+<section ng-controller="KeyOccurrencesController">
+	<div class="page-header">
+		<h1>Key Occurrences</h1>
+	</div>
+	<div class="col-md-3">
+		<form name="mongostatForm" class="form" ng-submit="query()" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<label class="control-label" for="database">Host</label>
+					<div class="controls">
+						<select name="host" ng-model="host" id="host" class="form-control" required>
+							<option></option>
+							<option ng-repeat="host in hosts | orderBy" value="{{host}}">{{host}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="database">Database</label>
+					<div class="controls">
+						<select name="database" ng-model="database" id="database" class="form-control" required>
+							<option></option>
+							<option ng-repeat="database in databases | orderBy" value="{{database}}">{{database}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="collection">Collection</label>
+					<div class="controls">
+						<select name="collection" ng-model="collection" id="collection" class="form-control" required>
+							<option></option>
+							<option ng-repeat="collection in collections | orderBy" value="{{collection}}">{{collection}}</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group text-right">
+					<button type="submit" class="btn btn-default">Execute</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="col-md-9">
+		<table class="table table-condensed borderless table-hover" ng-if="results.length > 0">
+			<caption>Searched {{lastSearch}} on {{lastSearchTime | date : "M/d/yy 'at' h:mm:ss a"}}</caption>
+			<thead>
+				<tr>
+					<th class="col-xs-2">Key</th>
+					<th class="col-xs-1">#</th>
+					<th class="col-xs-9"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in results | orderBy:['-totalOccurrences', 'name']" ng-attr-title="Key '{{item.name}}' occurs in {{item.percentContaining}}% of documents" >
+					<td>{{item.name}}</td>
+					<td>{{item.totalOccurrences}}</td>
+					<td>
+						<svg class="bar">
+							<rect height="100%" ng-attr-width="{{item.percentContaining}}%"></rect>
+						</svg>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+
+</section>
