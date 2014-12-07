@@ -44,10 +44,6 @@ angular.element(document).ready(function() {
 'use strict';
 
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
-'use strict';
-
-// Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
 'use strict';
 
@@ -58,114 +54,6 @@ ApplicationConfiguration.registerModule('mongostat');
 
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
-'use strict';
-
-// Configuring the Articles module
-angular.module('articles').run(['Menus',
-	function(Menus) {
-		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Articles', 'articles', 'dropdown', '/articles(/create)?');
-		Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
-		Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
-	}
-]);
-'use strict';
-
-// Setting up route
-angular.module('articles').config(['$stateProvider',
-	function($stateProvider) {
-		// Articles state routing
-		$stateProvider.
-		state('listArticles', {
-			url: '/articles',
-			templateUrl: 'modules/articles/views/list-articles.client.view.html'
-		}).
-		state('createArticle', {
-			url: '/articles/create',
-			templateUrl: 'modules/articles/views/create-article.client.view.html'
-		}).
-		state('viewArticle', {
-			url: '/articles/:articleId',
-			templateUrl: 'modules/articles/views/view-article.client.view.html'
-		}).
-		state('editArticle', {
-			url: '/articles/:articleId/edit',
-			templateUrl: 'modules/articles/views/edit-article.client.view.html'
-		});
-	}
-]);
-'use strict';
-
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
-		$scope.authentication = Authentication;
-
-		$scope.create = function() {
-			var article = new Articles({
-				title: this.title,
-				content: this.content
-			});
-			article.$save(function(response) {
-				$location.path('articles/' + response._id);
-
-				$scope.title = '';
-				$scope.content = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		$scope.remove = function(article) {
-			if (article) {
-				article.$remove();
-
-				for (var i in $scope.articles) {
-					if ($scope.articles[i] === article) {
-						$scope.articles.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.article.$remove(function() {
-					$location.path('articles');
-				});
-			}
-		};
-
-		$scope.update = function() {
-			var article = $scope.article;
-
-			article.$update(function() {
-				$location.path('articles/' + article._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		$scope.find = function() {
-			$scope.articles = Articles.query();
-		};
-
-		$scope.findOne = function() {
-			$scope.article = Articles.get({
-				articleId: $stateParams.articleId
-			});
-		};
-	}
-]);
-'use strict';
-
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
-	function($resource) {
-		return $resource('articles/:articleId', {
-			articleId: '@_id'
-		}, {
-			update: {
-				method: 'PUT'
-			}
-		});
-	}
-]);
 'use strict';
 
 // Setting up route
@@ -381,7 +269,8 @@ angular.module('core').service('Menus', [
 angular.module('mongostat').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Mongostat', 'mongostat', 'item', 'mongostat');
+		Menus.addMenuItem('topbar', 'MongoStat', 'mongostat', 'dropdown');
+		Menus.addSubMenuItem('topbar', 'mongostat', 'Key Occurrences', 'mongostat/keyOccurrences');
 	}
 ]);
 
@@ -393,25 +282,21 @@ angular.module('mongostat').config(['$stateProvider',
 		// Articles state routing
 		$stateProvider.
 		state('inputQuery', {
-			url: '/mongostat',
-			templateUrl: 'modules/mongostat/views/input-query-mongostat.client.view.html'
-		}).
-		state('displayResult', {
-			url: '/mongostat/result',
-			templateUrl: 'modules/mongostat/views/display-result-mongostat.client.view.html'
+			url: '/mongostat/keyOccurrences',
+			templateUrl: 'modules/mongoStat/views/keyOccurrences.client.view.html'
 		});
 	}
 ]);
 
 'use strict';
 
-angular.module('mongostat').controller('MongostatController', ['$scope', '$stateParams', '$location', 'Authentication', 'Mongostat',
+angular.module('mongostat').controller('KeyOccurrencesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Mongostat',
 	function($scope, $stateParams, $location, Authentication, Mongostat) {
 		$scope.authentication = Authentication;
 
 		$scope.query = function() {
 
-			$scope.results = Mongostat.query(
+			$scope.results = Mongostat.keyOccurrences(
 				{
 					database: $scope.database,
 					collection: $scope.collection,
@@ -419,6 +304,8 @@ angular.module('mongostat').controller('MongostatController', ['$scope', '$state
 				}
 
 			);
+			$scope.lastSearchTime = new Date();
+			$scope.lastSearch = [$scope.host, $scope.database, $scope.collection].join('/');
 			console.log($scope.results);
 		};
 
@@ -426,13 +313,17 @@ angular.module('mongostat').controller('MongostatController', ['$scope', '$state
 		$scope.databases = [];
 		$scope.hosts = Mongostat.query();
 
-
 		$scope.$watch('database', function(newVal) {
-			$scope.collections = newVal ? Mongostat.query({database: $scope.database, host: $scope.host}) : [];
+			$scope.collections = newVal ? Mongostat.query({
+				database: $scope.database,
+				host: $scope.host
+			}) : [];
 		});
 
 		$scope.$watch('host', function(newVal) {
-			$scope.databases = newVal ? Mongostat.query({host: $scope.host}) : [];
+			$scope.databases = newVal ? Mongostat.query({
+				host: $scope.host
+			}) : [];
 		});
 
 
@@ -444,7 +335,12 @@ angular.module('mongostat').controller('MongostatController', ['$scope', '$state
 //Articles service used for communicating with the articles REST endpoints
 angular.module('mongostat').factory('Mongostat', ['$resource',
 	function($resource) {
-		return $resource('mongostat/:host/:database/:collection', {}, {});
+		return $resource('mongostat/:host/:database/:collection', {}, {
+			keyOccurrences: {
+				url: 'mongostat/:host/:database/:collection/keyOccurrences',
+				isArray: true
+			}
+		});
 	}
 ]);
 
