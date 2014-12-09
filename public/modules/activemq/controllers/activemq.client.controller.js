@@ -14,7 +14,7 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 		$scope.query = function() {
 
-			$scope.results = ActiveMQ.query({
+			$scope.results = ActiveMQ.get({
 				host: $scope.host,
 				queue: $scope.queue
 			});

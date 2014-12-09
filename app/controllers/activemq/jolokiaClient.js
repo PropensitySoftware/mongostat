@@ -16,20 +16,36 @@ exports.queryQueues = function(hostKey, cb) {
         }
     });
 
-    var search= {
+    var op= {
         type: 'search',
         mbean: '*:destinationType=Queue,*'
     };
 
-    client.post('', search, function(err, req, res, obj) {
+    client.post('', op, function(err, req, res, obj) {
         if (err) throw err;
-        console.log(res.statusCode);
-        console.log(obj);
         cb(obj.value);
 
     });
 };
 
 exports.queryQueue = function(hostKey, queue, cb) {
-    cb([3, 4, 5]);
+    var host = config.activemqHosts[hostKey];
+
+    var client = restify.createJSONClient({
+        url: host.url,
+        headers: {
+            'Authorization': 'Basic ' + new Buffer(host.user + ':' + host.password).toString('base64')
+        }
+    });
+
+    var op= {
+        type: 'list',
+        mbean: queue
+    };
+
+    client.post('', op, function(err, req, res, obj) {
+        if (err) throw err;
+        cb(obj.value);
+
+    });
 };
