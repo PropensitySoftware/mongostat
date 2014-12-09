@@ -9,7 +9,6 @@
 					<label class="control-label" for="database">Host</label>
 					<div class="controls">
 						<select name="host" ng-model="host" id="host" class="form-control" required>
-							<option></option>
 							<option ng-repeat="host in hosts | orderBy" value="{{host}}">{{host}}</option>
 						</select>
 					</div>
@@ -18,7 +17,6 @@
 					<label class="control-label" for="database">Database</label>
 					<div class="controls">
 						<select name="database" ng-model="database" id="database" class="form-control" required>
-							<option></option>
 							<option ng-repeat="database in databases | orderBy" value="{{database}}">{{database}}</option>
 						</select>
 					</div>
@@ -27,7 +25,6 @@
 					<label class="control-label" for="collection">Collection</label>
 					<div class="controls">
 						<select name="collection" ng-model="collection" id="collection" class="form-control" required>
-							<option></option>
 							<option ng-repeat="collection in collections | orderBy" value="{{collection}}">{{collection}}</option>
 						</select>
 					</div>
