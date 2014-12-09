@@ -44,6 +44,11 @@ angular.element(document).ready(function() {
 'use strict';
 
 // Use Applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('activemq');
+
+'use strict';
+
+// Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
 'use strict';
 
@@ -54,6 +59,52 @@ ApplicationConfiguration.registerModule('mongostat');
 
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
+'use strict';
+
+// Configuring the Mongostat module
+angular.module('activemq').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'ActiveMQ', 'activemq', 'dropdown');
+		Menus.addSubMenuItem('topbar', 'activemq', 'Display Queues', 'activemq/display');
+	}
+]);
+
+'use strict';
+
+// Setting up route
+angular.module('activemq').config(['$stateProvider',
+	function($stateProvider) {
+		// Articles state routing
+		$stateProvider.
+		state('inputQuery', {
+			url: '/activemq/display',
+			templateUrl: 'modules/activemq/views/activemq.client.view.html'
+		});
+	}
+]);
+
+'use strict';
+
+angular.module('activemq').controller('DisplayController', ['$scope', '$stateParams', '$location', 'Authentication', 'ActiveMQ',
+	function($scope, $stateParams, $location, Authentication, ActiveMQ) {
+		$scope.authentication = Authentication;
+
+
+	}
+]);
+
+'use strict';
+
+//Articles service used for communicating with the articles REST endpoints
+angular.module('activemq').factory('ActiveMQ', ['$resource',
+	function($resource) {
+		return $resource('activemq/:host/:queue', {}, {
+
+		});
+	}
+]);
+
 'use strict';
 
 // Setting up route
@@ -269,7 +320,7 @@ angular.module('core').service('Menus', [
 angular.module('mongostat').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'MongoStat', 'mongostat', 'dropdown');
+		Menus.addMenuItem('topbar', 'Mongo', 'mongostat', 'dropdown');
 		Menus.addSubMenuItem('topbar', 'mongostat', 'Key Occurrences', 'mongostat/keyOccurrences');
 	}
 ]);

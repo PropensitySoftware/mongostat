@@ -16,7 +16,6 @@ angular.module('mongostat').controller('KeyOccurrencesController', ['$scope', '$
 			);
 			$scope.lastSearchTime = new Date();
 			$scope.lastSearch = [$scope.host, $scope.database, $scope.collection].join('/');
-			console.log($scope.results);
 		};
 
 		$scope.collections = [];

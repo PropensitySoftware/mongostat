@@ -1,9 +1,10 @@
-<section ng-controller="KeyOccurrencesController">
+<section ng-controller="ActiveMQController">
 	<div class="page-header">
-		<h1>Key Occurrences</h1>
+		<h1>ActiveMQ</h1>
 	</div>
 	<div class="col-md-3">
-		<form name="mongostatForm" class="form" ng-submit="query()" novalidate>
+		<form name="activemqForm" class="form" ng-submit="query()" novalidate>
+
 			<fieldset>
 				<div class="form-group">
 					<label class="control-label" for="host">Host</label>
@@ -14,13 +15,14 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="database">Database</label>
+					<label class="control-label" for="queue">Queue</label>
 					<div class="controls">
-						<select name="database" ng-model="database" id="database" class="form-control" required>
-							<option ng-repeat="database in databases | orderBy" value="{{database}}">{{database}}</option>
+						<select name="queue" ng-model="queue" id="queue" class="form-control" required>
+							<option ng-repeat="queue in queues | orderBy" value="{{queue}}">{{queue}}</option>
 						</select>
 					</div>
 				</div>
+				<!--
 				<div class="form-group">
 					<label class="control-label" for="collection">Collection</label>
 					<div class="controls">
@@ -29,6 +31,7 @@
 						</select>
 					</div>
 				</div>
+				-->
 				<div class="form-group text-right">
 					<button type="submit" class="btn btn-default">Execute</button>
 				</div>
@@ -39,26 +42,25 @@
 		<table class="table table-condensed borderless table-hover" ng-if="results.length > 0">
 			<caption>Searched {{lastSearch}} on {{lastSearchTime | date : "M/d/yy 'at' h:mm:ss a"}}</caption>
 			<thead>
-				<tr>
-					<th class="col-xs-2">Key</th>
-					<th class="col-xs-1">#</th>
-					<th class="col-xs-9"></th>
-				</tr>
+			<tr>
+				<th class="col-xs-2">Key</th>
+				<th class="col-xs-1">#</th>
+				<th class="col-xs-9"></th>
+			</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in results | orderBy:['-totalOccurrences', 'name']" ng-attr-title="Key '{{item.name}}' occurs in {{item.percentContaining}}% of documents" >
-					<td>{{item.name}}</td>
-					<td>{{item.totalOccurrences}}</td>
-					<td>
-						<svg class="bar">
-							<rect height="100%" ng-attr-width="{{item.percentContaining}}%"></rect>
-						</svg>
-					</td>
-				</tr>
+			<tr ng-repeat="item in results | orderBy:['-totalOccurrences', 'name']" ng-attr-title="Key '{{item.name}}' occurs in {{item.percentContaining}}% of documents" >
+				<td>{{item.name}}</td>
+				<td>{{item.totalOccurrences}}</td>
+				<td>
+					<svg class="bar">
+						<rect height="100%" ng-attr-width="{{item.percentContaining}}%"></rect>
+					</svg>
+				</td>
+			</tr>
 
 			</tbody>
 		</table>
 	</div>
-
 
 </section>

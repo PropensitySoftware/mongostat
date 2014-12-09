@@ -4,7 +4,7 @@
 angular.module('mongostat').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'MongoStat', 'mongostat', 'dropdown');
+		Menus.addMenuItem('topbar', 'Mongo', 'mongostat', 'dropdown');
 		Menus.addSubMenuItem('topbar', 'mongostat', 'Key Occurrences', 'mongostat/keyOccurrences');
 	}
 ]);
