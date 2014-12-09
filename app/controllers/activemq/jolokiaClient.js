@@ -25,9 +25,7 @@ exports.queryQueues = function(hostKey, cb) {
         if (err) throw err;
         console.log(res.statusCode);
         console.log(obj);
-        cb(_.map(obj.value, function(item) {
-            return item;
-        }));
+        cb(obj.value);
 
     });
 };
