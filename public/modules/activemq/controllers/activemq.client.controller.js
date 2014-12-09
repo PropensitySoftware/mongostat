@@ -21,7 +21,7 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 			$scope.lastSearchTime = new Date();
 			$scope.lastSearch = [$scope.host, $scope.queue].join('/');
-		}
+		};
 
 	}
 ]);
