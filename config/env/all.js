@@ -2,8 +2,8 @@
 
 module.exports = {
 	app: {
-		title: 'Mongostat',
-		description: 'MongoDB analysis tool written in Node.js',
+		title: 'STIM',
+		description: 'System Team Infrastructure Monitoring tool written in Node.js',
 		keywords: 'mongodb, express, angularjs, node.js, mongoose, passport'
 	},
 	port: process.env.PORT || 3000,

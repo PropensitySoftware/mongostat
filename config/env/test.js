@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/mongostat-test',
+	db: 'mongodb://localhost/stim-test',
 	port: 3001,
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
@@ -13,7 +13,7 @@ module.exports = {
 		}
 	},
 	app: {
-		title: 'Mongostat - Test Environment'
+		title: 'STIM - Test Environment'
 	},
 	facebook: {
 		clientID: process.env.FACEBOOK_ID || 'APP_ID',

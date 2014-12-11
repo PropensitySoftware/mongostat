@@ -53,6 +53,11 @@ ApplicationConfiguration.registerModule('core');
 'use strict';
 
 // Use Applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('dashboard');
+
+'use strict';
+
+// Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('mongostat');
 
 'use strict';
@@ -92,6 +97,10 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 		$scope.hosts = ActiveMQ.query();
 
+		$scope.parseQueueName = function(queueName) {
+			return queueName.match(/destinationName=([^,]*)/)[1];
+		};
+
 		$scope.$watch('host', function(newVal) {
 			$scope.queues = newVal ? ActiveMQ.query({
 				host: $scope.host
@@ -100,14 +109,14 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 		$scope.query = function() {
 
-			$scope.results = ActiveMQ.query({
+			$scope.results = ActiveMQ.get({
 				host: $scope.host,
 				queue: $scope.queue
 			});
 
 			$scope.lastSearchTime = new Date();
 			$scope.lastSearch = [$scope.host, $scope.queue].join('/');
-		}
+		};
 
 	}
 ]);
@@ -126,6 +135,7 @@ angular.module('activemq').factory('ActiveMQ', ['$resource',
 'use strict';
 
 // Setting up route
+/*
 angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 		// Redirect to home view when route not found
@@ -139,6 +149,8 @@ angular.module('core').config(['$stateProvider', '$urlRouterProvider',
 		});
 	}
 ]);
+*/
+
 'use strict';
 
 angular.module('core').controller('HeaderController', ['$scope', 'Authentication', 'Menus',
@@ -334,6 +346,83 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+// Configuring the Dashboard module
+/*
+angular.module('dashboard').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'ActiveMQ', 'activemq', 'dropdown');
+		Menus.addSubMenuItem('topbar', 'activemq', 'Display Queues', 'activemq/display');
+	}
+]);
+*/
+
+'use strict';
+
+// Setting up route
+angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
+	function($stateProvider, $urlRouterProvider) {
+
+		console.log('Configuring dashboard routes!');
+
+		// Redirect to home view when route not found
+		$urlRouterProvider.otherwise('/');
+
+		// Home state routing
+		$stateProvider
+			.state('home', {
+				url: '/',
+				templateUrl: 'modules/dashboard/views/dashboard.client.view.html'
+			})
+			.state('dashboard', {
+				url: '/dashboard'
+			})
+			.state('dashboard.activemq', {
+				url: '/dashboard/activemq',
+				template: 'ACTIVEMQ!',
+				controller: {}
+			})
+			.state('dashboard.mongo', {
+				url: '/dashboard/mongo',
+				template: 'MONGO!',
+				controller: {}
+			});
+	}
+]);
+
+'use strict';
+
+angular.module('dashboard').controller('DashboardController', ['$scope', '$stateParams', '$location', 'Dashboard'], [
+	function($scope, $stateParams, $location, Dashboard) {
+
+		$scope.activemqHosts = Dashboard.activemq.query();
+		$scope.mongoHosts = Dashboard.mongo.query();
+
+	}
+]);
+
+'use strict';
+
+//Articles service used for communicating with the articles REST endpoints
+angular.module('dashboard').factory('Dashboard', ['$resource',
+	function($resource) {
+		return $resource('dashboard', {
+
+			activemq: {
+				url: 'dashboard/activemq'
+			},
+			mongo: {
+				url: 'dashboard/mongo'
+			}
+
+		}, {
+
+		});
+	}
+]);
+
+'use strict';
+
 // Configuring the Mongostat module
 angular.module('mongostat').run(['Menus',
 	function(Menus) {
@@ -522,6 +611,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$http
 		};
 	}
 ]);
+
 'use strict';
 
 angular.module('users').controller('PasswordController', ['$scope', '$stateParams', '$http', '$location', 'Authentication',
