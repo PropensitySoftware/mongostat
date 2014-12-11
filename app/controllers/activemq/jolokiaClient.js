@@ -6,10 +6,52 @@ var
     _ = require('lodash')
 ;
 
+
+exports.getQueueCounts = function(hostKey, cb) {
+
+	exports.queryQueues(hostKey, function(queueList) {
+	
+		var ops = [];
+		queueList.forEach(function(item) {
+			console.log(item);
+			ops.push({
+				type: 'read',
+				mbean: item,
+				attribute: 'TotalMessageCount'
+			});
+		});
+
+		var host = config.activemqHosts[hostKey];
+		var client = restify.createJSONClient({
+			url: host.url,
+			headers: {
+				'Authorization': 'Basic ' + new Buffer(host.user + ':' + host.password).toString('base64')
+			}
+		});
+		console.log(ops);
+		client.post('', ops, function(err, req, res, obj) {
+			if (err) throw err;
+			
+			var ret = [];
+			for (var i in ops) {
+				ret.push({
+					name: ops[i].mbean,
+					count: obj[i]
+				});
+			}
+			console.log(ret);
+			cb(ret);
+		});
+	});
+
+
+
+
+};
+
+
 exports.queryQueues = function(hostKey, cb) {
-	console.log(hostKey);
     var host = config.activemqHosts[hostKey];
-	console.log(host);
 
     var client = restify.createJSONClient({
         url: host.url,

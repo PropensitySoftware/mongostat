@@ -14,6 +14,17 @@ module.exports = _.extend(
 
 
 /**
+ * Get queue counts
+ */
+module.exports.getQueueCounts = function(req, res) {
+	var host = req.param('host');
+	jc.getQueueCounts(host, function(result) {
+		res.json(result);
+	});
+};
+
+
+/**
  * Get a queue
  */
 module.exports.queryQueue = function(req, res) {

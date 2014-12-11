@@ -18,8 +18,14 @@ angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 					'activemq': {
 						templateUrl: 'modules/dashboard/views/activemq/summary.client.view.html'
 					},
+					'activemqDetail': {
+						templateUrl: 'modules/dashboard/views/activemq/detail.client.view.html'
+					},					
 					'mongo': {
 						templateUrl: 'modules/dashboard/views/mongo/summary.client.view.html'
+					},
+					'mongoDetail': {
+						templateUrl: 'modules/dashboard/views/mongo/detail.client.view.html'
 					}
 				}
 

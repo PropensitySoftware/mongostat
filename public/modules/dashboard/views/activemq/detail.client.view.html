@@ -1,0 +1,18 @@
+<code>{{queues}}</code>
+<div data-ng-if="queues.length > 0">
+	<h1 class="page-header">Queues</h1>
+	<table class="table table-condensed table-striped">
+		<thead>
+			<tr>
+				<th>Queue</th>
+				<th class="col-md-1">Count</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="queue in queues | orderby:name">
+				<td>{{queue.name}}</td>
+				<td>{{queue.count}}</td>			
+			</tr>
+		</tbody>
+	</table>
+</div>

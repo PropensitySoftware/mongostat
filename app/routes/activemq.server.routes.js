@@ -18,6 +18,8 @@ module.exports = function(app) {
 		.get(users.requiresLogin, activemq.queryQueues);
 	app.route('/activemq/:host/:queue/')
 		.get(users.requiresLogin, activemq.queryQueue);
+	app.route('/activemq/:host/counts/')
+		.get(activemq.getQueueCounts);
 
 
 };
