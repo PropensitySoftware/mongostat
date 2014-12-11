@@ -8,7 +8,7 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 		$scope.parseQueueName = function(queueName) {
 			return queueName.match(/destinationName=([^,]*)/)[1];
-		}
+		};
 
 		$scope.$watch('host', function(newVal) {
 			$scope.queues = newVal ? ActiveMQ.query({
@@ -25,20 +25,6 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 			$scope.lastSearchTime = new Date();
 			$scope.lastSearch = [$scope.host, $scope.queue].join('/');
-		};
-
-		$scope.delete = function() {
-console.log(deleting);
-			ActiveMQ.delete({
-				host: $scope.host,
-				queue: $scope.queue
-			});
-
-			delete $scope.results;
-			$scope.queues = [];
-
-			delete $scope.lastSearchTime;
-			delete $scope.lastSearch;
 		};
 
 	}
