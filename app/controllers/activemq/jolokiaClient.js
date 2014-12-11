@@ -7,7 +7,9 @@ var
 ;
 
 exports.queryQueues = function(hostKey, cb) {
+	console.log(hostKey);
     var host = config.activemqHosts[hostKey];
+	console.log(host);
 
     var client = restify.createJSONClient({
         url: host.url,

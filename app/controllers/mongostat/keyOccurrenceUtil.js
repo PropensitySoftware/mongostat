@@ -39,8 +39,6 @@ function mongostatTypeOf (thing) {
 //flattens object keys to 1D. i.e. {'key1':1,{'key2':{'key3':2}}} becomes {'key1':1,'key2.key3':2}
 //we assume no '.' characters in the keys, which is an OK assumption for MongoDB
 function serializeDoc(doc, maxDepth) {
-    console.log(doc);
-    console.log(_.keys(doc));
     var result = {};
 
     //determining if an object is a Hash vs Array vs something else is hard
@@ -52,7 +50,6 @@ function serializeDoc(doc, maxDepth) {
     }
 
     function serialize(document, parentKey, maxDepth) {
-        console.log(document);
         var keys = _.keys(document);
         keys.forEach(function(key) {
 
@@ -61,7 +58,6 @@ function serializeDoc(doc, maxDepth) {
             //if(typeof value != 'object')
             result[parentKey + key] = value;
             //it's an object, recurse...only if we haven't reached max depth
-            console.log(key + ' ' + isHash(value));
             if (isHash(value) && (maxDepth > 1)) {
                 serialize(value, parentKey + key + '.', maxDepth - 1);
             }
@@ -119,10 +115,8 @@ exports.run = function(db, options, callback) {
 
             } else {
                 numDocuments++;
-                console.log(obj);
                 var flattened = serializeDoc(obj, maxDepth);
                 for (var key in flattened) {
-                    console.log(key);
                     var value = flattened[key];
 
                     //translate unnamed object key from {_parent_name_}.{_index_} to {_parent_name_}.XX

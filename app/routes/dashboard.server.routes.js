@@ -16,6 +16,7 @@ module.exports = function(app) {
 
 	//mongo routes
 	app.route('/dashboard/mongo').get(mongostat.queryHosts);
+	app.route('/dashboard/mongo/tc').get(mongostat.getTotalCreated);
 
 
 };

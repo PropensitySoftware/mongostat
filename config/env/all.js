@@ -70,14 +70,21 @@ module.exports = {
 		]
 	},
 	mongoHosts: {
+		primary: 'mongodb://localhost:27017',
 		dev: 'mongodb://localhost:27017'
 	},
 	activemqHosts: {
+		primary: {
+			url:  'http://localhost:8161/api/jolokia',
+			user: 'admin',
+			password: 'admin'
+		},
 		dev: {
 			url:  'http://localhost:8161/api/jolokia',
 			user: 'admin',
 			password: 'admin'
 		}
+		
 	}
 
 };

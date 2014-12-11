@@ -8,7 +8,8 @@ var
 	_ = require('lodash');
 
 module.exports = _.extend(
-	require('./mongostat/mongostat.keyOccurrences.server.controller')
+	require('./mongostat/mongostat.keyOccurrences.server.controller'),
+	require('./mongostat/mongostat.summary.server.controller')	
 );
 
 

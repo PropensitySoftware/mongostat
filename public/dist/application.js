@@ -363,40 +363,38 @@ angular.module('dashboard').run(['Menus',
 angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 	function($stateProvider, $urlRouterProvider) {
 
-		console.log('Configuring dashboard routes!');
-
 		// Redirect to home view when route not found
 		$urlRouterProvider.otherwise('/');
 
 		// Home state routing
 		$stateProvider
-			.state('home', {
-				url: '/',
-				templateUrl: 'modules/dashboard/views/dashboard.client.view.html'
-			})
 			.state('dashboard', {
-				url: '/dashboard'
+				url: '/',
+				views: {
+					'': {
+						templateUrl: 'modules/dashboard/views/dashboard.client.view.html'
+					},
+					'activemq': {
+						templateUrl: 'modules/dashboard/views/activemq/summary.client.view.html'
+					},
+					'mongo': {
+						templateUrl: 'modules/dashboard/views/mongo/summary.client.view.html'
+					}
+				}
+
 			})
-			.state('dashboard.activemq', {
-				url: '/dashboard/activemq',
-				template: 'ACTIVEMQ!',
-				controller: {}
-			})
-			.state('dashboard.mongo', {
-				url: '/dashboard/mongo',
-				template: 'MONGO!',
-				controller: {}
-			});
+			;
 	}
 ]);
 
 'use strict';
 
-angular.module('dashboard').controller('DashboardController', ['$scope', '$stateParams', '$location', 'Dashboard'], [
+angular.module('dashboard').controller('DashboardController', ['$scope', '$stateParams', '$location', 'Dashboard',
 	function($scope, $stateParams, $location, Dashboard) {
 
-		$scope.activemqHosts = Dashboard.activemq.query();
-		$scope.mongoHosts = Dashboard.mongo.query();
+		$scope.activemqHosts = Dashboard.activemq();
+		$scope.mongoHosts = Dashboard.mongo();
+		$scope.mongoTC = Dashboard.mongoTC();
 
 	}
 ]);
@@ -406,16 +404,23 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$state
 //Articles service used for communicating with the articles REST endpoints
 angular.module('dashboard').factory('Dashboard', ['$resource',
 	function($resource) {
-		return $resource('dashboard', {
+		return $resource('dashboard', {}, {
 
 			activemq: {
-				url: 'dashboard/activemq'
+				url: 'dashboard/activemq',
+				method: 'GET',
+				isArray: true
 			},
 			mongo: {
-				url: 'dashboard/mongo'
+				url: 'dashboard/mongo',
+				method: 'GET',
+				isArray: true
+			},
+			mongoTC: {
+				url: 'dashboard/mongo/tc',
+				method: 'GET',
+				isArray: false
 			}
-
-		}, {
 
 		});
 	}

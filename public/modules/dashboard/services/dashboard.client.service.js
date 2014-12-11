@@ -14,6 +14,11 @@ angular.module('dashboard').factory('Dashboard', ['$resource',
 				url: 'dashboard/mongo',
 				method: 'GET',
 				isArray: true
+			},
+			mongoTC: {
+				url: 'dashboard/mongo/tc',
+				method: 'GET',
+				isArray: false
 			}
 
 		});
