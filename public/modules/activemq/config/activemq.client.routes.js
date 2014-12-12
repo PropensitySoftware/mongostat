@@ -3,11 +3,11 @@
 // Setting up route
 angular.module('activemq').config(['$stateProvider',
 	function($stateProvider) {
-		// Articles state routing
+		// state routing
 		$stateProvider.
-		state('displayActiveMQ', {
-			url: '/activemq/display',
-			templateUrl: 'modules/activemq/views/activemq.client.view.html'
+		state('browseQueues', {
+			url: '/activemq/browse',
+			templateUrl: 'modules/activemq/views/browse.client.view.html'
 		});
 	}
 ]);

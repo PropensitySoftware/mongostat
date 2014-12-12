@@ -19,6 +19,6 @@ angular.module('activemq').factory('ActiveMQ', ['$resource',
 					isArray: true			
 				}
 			})
-		}
+		};
 	}
 ]);

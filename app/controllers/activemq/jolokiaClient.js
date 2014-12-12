@@ -11,11 +11,8 @@ exports.getQueueCounts = function(hostKey, cb) {
 
 	exports.queryQueues(hostKey, function(queueList) {
 	
-		console.log(queueList);
-	
 		var ops = [];
 		queueList.forEach(function(item) {
-			console.log(item);
 			ops.push({
 				type: 'read',
 				mbean: item,
@@ -30,7 +27,6 @@ exports.getQueueCounts = function(hostKey, cb) {
 				'Authorization': 'Basic ' + new Buffer(host.user + ':' + host.password).toString('base64')
 			}
 		});
-		console.log(ops);
 		client.post('', ops, function(err, req, res, obj) {
 			if (err) throw err;
 			
@@ -41,7 +37,6 @@ exports.getQueueCounts = function(hostKey, cb) {
 					count: obj[i].value
 				});
 			}
-			console.log(ret);
 			cb(ret);
 		});
 	});
@@ -85,13 +80,13 @@ exports.queryQueue = function(hostKey, queue, cb) {
     });
 
     var op= {
-        type: 'list',
-        mbean: queue
+        type: 'exec',
+        mbean: queue,
+		operation: 'browse()'
     };
 
     client.post('', op, function(err, req, res, obj) {
         if (err) throw err;
         cb(obj.value);
-
     });
 };

@@ -71,7 +71,7 @@ angular.module('activemq').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
 		Menus.addMenuItem('topbar', 'ActiveMQ', 'activemq', 'dropdown');
-		Menus.addSubMenuItem('topbar', 'activemq', 'Display Queues', 'activemq/display');
+		Menus.addSubMenuItem('topbar', 'activemq', 'Queue Browser', 'activemq/browse');
 	}
 ]);
 
@@ -80,11 +80,11 @@ angular.module('activemq').run(['Menus',
 // Setting up route
 angular.module('activemq').config(['$stateProvider',
 	function($stateProvider) {
-		// Articles state routing
+		// state routing
 		$stateProvider.
-		state('displayActiveMQ', {
-			url: '/activemq/display',
-			templateUrl: 'modules/activemq/views/activemq.client.view.html'
+		state('browseQueues', {
+			url: '/activemq/browse',
+			templateUrl: 'modules/activemq/views/browse.client.view.html'
 		});
 	}
 ]);
@@ -95,27 +95,25 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 	function($scope, $stateParams, $location, Authentication, ActiveMQ) {
 		$scope.authentication = Authentication;
 
-		$scope.hosts = ActiveMQ.query();
+		$scope.hosts = ActiveMQ.rest.hosts();
 
-		$scope.parseQueueName = function(queueName) {
-			return queueName.match(/destinationName=([^,]*)/)[1];
-		};
+		$scope.parseQueueName = ActiveMQ.parseQueueName;
 
 		$scope.$watch('host', function(newVal) {
-			$scope.queues = newVal ? ActiveMQ.query({
+			$scope.queues = newVal ? ActiveMQ.rest.query({
 				host: $scope.host
 			}) : [];
 		});
 
 		$scope.query = function() {
 
-			$scope.results = ActiveMQ.get({
+			$scope.results = ActiveMQ.rest.query({
 				host: $scope.host,
 				queue: $scope.queue
 			});
 
 			$scope.lastSearchTime = new Date();
-			$scope.lastSearch = [$scope.host, $scope.queue].join('/');
+			$scope.lastSearch = [$scope.host, ActiveMQ.parseQueueName($scope.queue)].join('/');
 		};
 
 	}
@@ -126,9 +124,23 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 //Articles service used for communicating with the articles REST endpoints
 angular.module('activemq').factory('ActiveMQ', ['$resource',
 	function($resource) {
-		return $resource('activemq/:host/:queue', {}, {
-
-		});
+		return {
+			parseQueueName: function(queueName) {
+				return queueName.match(/destinationName=([^,]*)/)[1];
+			},
+			rest: $resource('activemq/:host/queues/:queue', {}, {
+				primaryQueueCount: {
+					url: 'activemq/primary/counts',
+					method: 'GET',
+					isArray: true
+				}, 
+				hosts: {
+					url: 'activemq/:host',
+					method: 'GET',
+					isArray: true			
+				}
+			})
+		};
 	}
 ]);
 
@@ -377,8 +389,14 @@ angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 					'activemq': {
 						templateUrl: 'modules/dashboard/views/activemq/summary.client.view.html'
 					},
+					'activemqDetail': {
+						templateUrl: 'modules/dashboard/views/activemq/detail.client.view.html'
+					},					
 					'mongo': {
 						templateUrl: 'modules/dashboard/views/mongo/summary.client.view.html'
+					},
+					'mongoDetail': {
+						templateUrl: 'modules/dashboard/views/mongo/detail.client.view.html'
 					}
 				}
 
@@ -389,13 +407,17 @@ angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 
 'use strict';
 
-angular.module('dashboard').controller('DashboardController', ['$scope', '$stateParams', '$location', 'Dashboard',
-	function($scope, $stateParams, $location, Dashboard) {
+angular.module('dashboard').controller('DashboardController', ['$scope', '$stateParams', '$location', 'Dashboard', 'ActiveMQ',
+	function($scope, $stateParams, $location, Dashboard, ActiveMQ) {
 
 		$scope.activemqHosts = Dashboard.activemq();
 		$scope.mongoHosts = Dashboard.mongo();
 		$scope.mongoTC = Dashboard.mongoTC();
+		
+		$scope.queues = ActiveMQ.rest.primaryQueueCount();
 
+		$scope.parseQueueName = ActiveMQ.parseQueueName;		
+		
 	}
 ]);
 

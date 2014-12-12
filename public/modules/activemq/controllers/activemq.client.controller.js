@@ -16,13 +16,13 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 
 		$scope.query = function() {
 
-			$scope.results = ActiveMQ.rest.get({
+			$scope.results = ActiveMQ.rest.query({
 				host: $scope.host,
 				queue: $scope.queue
 			});
 
 			$scope.lastSearchTime = new Date();
-			$scope.lastSearch = [$scope.host, $scope.queue].join('/');
+			$scope.lastSearch = [$scope.host, ActiveMQ.parseQueueName($scope.queue)].join('/');
 		};
 
 	}

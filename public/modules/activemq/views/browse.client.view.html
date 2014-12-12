@@ -1,0 +1,49 @@
+<section ng-controller="ActiveMQController">
+
+	<div class="row">
+		<form name="activemqForm" class="form-inline" ng-submit="query()" novalidate>
+			<p>
+				<div class="form-group col-md-1">
+					<label class="control-label">Browse Queues</label>
+				</div>
+				<div class="form-group col-md-3">
+					<select name="host" ng-model="host" id="host" class="form-control" required style="width: 100%">
+						<option ng-repeat="host in hosts | orderBy" value="{{host}}">{{host}}</option>
+					</select>
+				</div>
+				<div class="form-group col-md-4">
+					<select name="queue" ng-model="queue" id="queue" class="form-control" required style="width: 100%">
+						<option ng-repeat="queue in queues | orderBy" value="{{queue}}">{{parseQueueName(queue)}}</option>
+					</select>
+				</div>
+				<div class="form-group col-md-3">
+					<button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</p>
+		</form>
+	</div>
+	<div data-ng-show="lastSearch" >
+		<table class="table table-condensed table-striped">
+			<caption>
+				Browsing {{lastSearch}}, queried at {{lastSearchTime}}
+			</caption>
+			<thead>
+				<tr class="bg-primary">
+					<th>JMS Message ID</th>
+					<th>Timestamp</th>
+					<th>Details</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-show="results.length == 0">
+					<td colspan="3">No messages found</td>
+				</tr>
+				<tr data-ng-repeat="message in results">
+					<td>{{message.JMSMessageID}}</td>
+					<td>{{message.JMSTimestamp}}</td>
+					<td>{{message.Text}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
