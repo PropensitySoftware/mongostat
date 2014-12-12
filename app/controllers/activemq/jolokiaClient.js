@@ -11,13 +11,15 @@ exports.getQueueCounts = function(hostKey, cb) {
 
 	exports.queryQueues(hostKey, function(queueList) {
 	
+		console.log(queueList);
+	
 		var ops = [];
 		queueList.forEach(function(item) {
 			console.log(item);
 			ops.push({
 				type: 'read',
 				mbean: item,
-				attribute: 'TotalMessageCount'
+				attribute: 'QueueSize'
 			});
 		});
 
@@ -36,7 +38,7 @@ exports.getQueueCounts = function(hostKey, cb) {
 			for (var i in ops) {
 				ret.push({
 					name: ops[i].mbean,
-					count: obj[i]
+					count: obj[i].value
 				});
 			}
 			console.log(ret);

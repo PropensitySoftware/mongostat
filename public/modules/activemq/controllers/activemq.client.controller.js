@@ -4,21 +4,19 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$statePa
 	function($scope, $stateParams, $location, Authentication, ActiveMQ) {
 		$scope.authentication = Authentication;
 
-		$scope.hosts = ActiveMQ.query();
+		$scope.hosts = ActiveMQ.rest.hosts();
 
-		$scope.parseQueueName = function(queueName) {
-			return queueName.match(/destinationName=([^,]*)/)[1];
-		};
+		$scope.parseQueueName = ActiveMQ.parseQueueName;
 
 		$scope.$watch('host', function(newVal) {
-			$scope.queues = newVal ? ActiveMQ.query({
+			$scope.queues = newVal ? ActiveMQ.rest.query({
 				host: $scope.host
 			}) : [];
 		});
 
 		$scope.query = function() {
 
-			$scope.results = ActiveMQ.get({
+			$scope.results = ActiveMQ.rest.get({
 				host: $scope.host,
 				queue: $scope.queue
 			});

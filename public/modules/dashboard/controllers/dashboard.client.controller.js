@@ -7,7 +7,9 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$state
 		$scope.mongoHosts = Dashboard.mongo();
 		$scope.mongoTC = Dashboard.mongoTC();
 		
-		$scope.queues = ActiveMQ.primaryQueueCount();
+		$scope.queues = ActiveMQ.rest.primaryQueueCount();
 
+		$scope.parseQueueName = ActiveMQ.parseQueueName;		
+		
 	}
 ]);
