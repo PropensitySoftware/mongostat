@@ -15,6 +15,9 @@ angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 					'': {
 						templateUrl: 'modules/dashboard/views/dashboard.client.view.html'
 					},
+					'dailyCounts': {
+						templateUrl: 'modules/dashboard/views/dailyCounts.client.view.html'
+					},
 					'activemq': {
 						templateUrl: 'modules/dashboard/views/activemq/summary.client.view.html'
 					},

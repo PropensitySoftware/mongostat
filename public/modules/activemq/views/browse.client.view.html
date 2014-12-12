@@ -1,26 +1,24 @@
 <section ng-controller="ActiveMQController">
 
 	<div class="row">
-		<form name="activemqForm" class="form-inline" ng-submit="query()" novalidate>
-			<p>
+		<p>
+			<form name="activemqForm" class="form-inline" ng-submit="query()" novalidate>
 				<div class="form-group col-md-1">
 					<label class="control-label">Browse Queues</label>
 				</div>
 				<div class="form-group col-md-3">
-					<select name="host" ng-model="host" id="host" class="form-control" required style="width: 100%">
-						<option ng-repeat="host in hosts | orderBy" value="{{host}}">{{host}}</option>
+					<select name="host" ng-model="host" id="host" class="form-control" required style="width: 100%" data-ng-options="o as o for o in hosts | orderBy">
 					</select>
 				</div>
 				<div class="form-group col-md-4">
-					<select name="queue" ng-model="queue" id="queue" class="form-control" required style="width: 100%">
-						<option ng-repeat="queue in queues | orderBy" value="{{queue}}">{{parseQueueName(queue)}}</option>
+					<select name="queue" ng-model="queue" id="queue" class="form-control" required style="width: 100%" data-ng-options="o as parseQueueName(o) for o in queues | orderBy">
 					</select>
 				</div>
 				<div class="form-group col-md-3">
 					<button type="submit" class="btn btn-default">Submit</button>
 				</div>
-			</p>
-		</form>
+			</form>
+		</p>
 	</div>
 	<div data-ng-show="lastSearch" >
 		<table class="table table-condensed table-striped">

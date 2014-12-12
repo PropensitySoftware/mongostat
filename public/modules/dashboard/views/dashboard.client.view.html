@@ -1,9 +1,10 @@
 <section ng-controller="DashboardController"s>
 
 	<div class="row">
-		<div data-ui-view="activemq@"></div>
-		<div data-ui-view="mongo@"></div>
+		<div class="col-md-6" data-ui-view="dailyCounts@">
+		</div>
 	</div>
+	<hr />
 	<div class="row">
 		<div class="col-md-3" data-ui-view="activemqDetail@"></div>
 		<div class="col-md-3" data-ui-view="mongoDetail@"></div>

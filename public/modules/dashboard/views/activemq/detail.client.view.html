@@ -6,8 +6,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr data-ng-repeat="queue in queues | orderBy:['-count', 'name']">
-			<td>{{parseQueueName(queue.name)}}</td>
+		<tr data-ng-repeat="queue in queues | orderBy:['-count', 'name']" >
+			<td>
+				<a data-ui-sref="browseQueues({host:'primary', queue: queue.name})">
+					{{parseQueueName(queue.name)}}
+				</a>
+			</td>
 			<td class="text-right">
 				<span data-ng-class="queue.count > 3 ? 'label label-danger' : ''">
 					{{queue.count}}
