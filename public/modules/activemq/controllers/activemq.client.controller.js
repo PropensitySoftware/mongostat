@@ -6,7 +6,6 @@ angular.module('activemq').controller('ActiveMQController', ['$scope', '$state',
 		$scope.authentication = Authentication;
 
 		$scope.$watch('host', function(newVal) {
-			console.log(newVal + ' changed');
 			$scope.queues = newVal ? ActiveMQ.rest.query({
 				host: $scope.host
 			}) : [];
