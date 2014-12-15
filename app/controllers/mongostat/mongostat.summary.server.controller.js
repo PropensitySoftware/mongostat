@@ -28,7 +28,7 @@ exports.getTotalCreated = function(req, res) {
 	
 	MongoClient.connect(config.mongoHosts.primary + '/' + options.database, function(err, db) {
 		db.collection(options.collection).find(query).count(function (err, obj) {
-			res.status(200).json(obj);
+			res.status(200).json(_.extend(query, {count: obj}));
 			db.close();
 		});
 	});
