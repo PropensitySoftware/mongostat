@@ -134,7 +134,7 @@ angular.module('core').service('Menus', [
 
 			// Search for menu item to remove
 			for (var itemIndex in this.menus[menuId].items) {
-				if (this.menus[menuId].items[itemIndex].link === menuItemState) {
+				if (this.menus[menuId].items[itemIndex].state === menuItemState) {
 					this.menus[menuId].items.splice(itemIndex, 1);
 				}
 			}
@@ -151,7 +151,7 @@ angular.module('core').service('Menus', [
 			// Search for menu item to remove
 			for (var itemIndex in this.menus[menuId].items) {
 				for (var subitemIndex in this.menus[menuId].items[itemIndex].items) {
-					if (this.menus[menuId].items[itemIndex].items[subitemIndex].link === submenuItemState) {
+					if (this.menus[menuId].items[itemIndex].items[subitemIndex].state === submenuItemState) {
 						this.menus[menuId].items[itemIndex].items.splice(subitemIndex, 1);
 					}
 				}
