@@ -5,6 +5,6 @@ angular.module('activemq').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
 		Menus.addMenuItem('topbar', 'ActiveMQ', 'activemq', 'dropdown');
-		Menus.addSubMenuItem('topbar', 'activemq', 'Queue Browser', 'activemq/browse');
+		Menus.addSubMenuItem('topbar', 'activemq', 'Queue Browser', 'browseQueues');
 	}
 ]);

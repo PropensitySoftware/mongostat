@@ -64,7 +64,7 @@ exports.queryQueues = function(hostKey, cb) {
 
     client.post('', op, function(err, req, res, obj) {
         if (err) throw err;
-        cb(obj.value);
+        cb(obj.value.filter(function(item) {return !item.match(/endpoint=/);}));
 
     });
 };

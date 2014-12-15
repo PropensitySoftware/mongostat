@@ -88,6 +88,11 @@ module.exports = {
 			url:  'http://localhost:8161/api/jolokia',
 			user: 'admin',
 			password: 'admin'
+		},
+		mehrzad: {
+			url:  'http://172.17.144.111:8161/api/jolokia',
+			user: 'admin',
+			password: 'admin'
 		}
 		
 	}

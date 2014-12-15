@@ -8,7 +8,7 @@
 	<tbody>
 		<tr data-ng-repeat="queue in queues | orderBy:['-count', 'name']" >
 			<td>
-				<a data-ui-sref="browseQueues({host:'primary', queue: queue.name})">
+				<a data-ui-sref="browseQueues.results({host:'primary', queue: queue.name})">
 					{{parseQueueName(queue.name)}}
 				</a>
 			</td>

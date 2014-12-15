@@ -9,7 +9,7 @@ angular.module('dashboard').config(['$stateProvider', '$urlRouterProvider',
 
 		// Home state routing
 		$stateProvider
-			.state('dashboard', {
+			.state('home', {
 				url: '/',
 				views: {
 					'': {
