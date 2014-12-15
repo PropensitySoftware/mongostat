@@ -13,8 +13,6 @@ angular.module('core').service('Menus', [
 		// A private function for rendering decision 
 		var shouldRender = function(user) {
 		
-			console.log(this);
-		
 			if (user) {
 				if (!!~this.roles.indexOf('*')) {
 					return true;

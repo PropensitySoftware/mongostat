@@ -7,7 +7,7 @@ angular.module('activemq').config(['$stateProvider',
 		$stateProvider
 		.state('browseQueues', {
 			url: '/activemq/browse',
-			templateUrl: 'modules/activemq/views/browse.client.view.html'			
+			templateUrl: 'modules/activemq/views/browse.client.view.html'
 		})
 		.state('browseQueues.results', {
 			url: '/:host/:queue',		
