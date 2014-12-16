@@ -18,8 +18,12 @@ angular.module('dashboard').factory('Dashboard', ['$resource',
 			mongoTC: {
 				url: 'dashboard/mongo/tc',
 				method: 'GET'
+			},
+			mongoProfilerSummary: {
+				url: 'dashboard/mongo/profilerSummary',
+				method: 'GET',
+				isArray: true
 			}
-
 		});
 	}
 ]);

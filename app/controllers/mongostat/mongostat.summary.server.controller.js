@@ -12,7 +12,7 @@ var
 
 
 /**
- * Execute a query
+ * Get total created cases
  */
 exports.getTotalCreated = function(req, res) {
 
@@ -31,5 +31,48 @@ exports.getTotalCreated = function(req, res) {
 			res.status(200).json(_.extend(query, {count: obj}));
 			db.close();
 		});
+	});
+};
+
+/**
+ * Get simple profiler statistics
+ */
+exports.getProfilerSummary = function(req, res) {
+
+	var options = {
+		collection: 'system.profile',
+		database: 'profDump',
+		host: req.param('host')
+	};
+	
+	MongoClient.connect(config.mongoHosts.primary + '/' + options.database, function(err, db) {
+		var collection = db.collection(options.collection);
+		db.collection(options.collection).group(
+			{op: 1},
+			{},
+			{
+				min: 99999999999,
+				max: -99999999999,
+				count: 0,
+				total: 0
+			},
+			function(curr, result) {
+				result.count++;
+				result.total += curr.millis;
+				if (curr.millis > result.max) {
+					result.max = curr.millis;
+				}
+				if (curr.millis < result.min) {
+					result.min = curr.millis;
+				}
+			},
+			function(result) {
+				result.avg = result.total / result.count;
+			},
+			function(err, result) {
+				if (err) throw err;
+				res.status(200).json(result);
+			}
+		);
 	});
 };

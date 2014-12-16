@@ -6,6 +6,7 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$state
 		$scope.activemqHosts = Dashboard.activemq();
 		$scope.mongoHosts = Dashboard.mongo();
 		$scope.mongoTC = Dashboard.mongoTC();
+		$scope.mongoProfilerSummary = Dashboard.mongoProfilerSummary();
 		
 		$scope.queues = ActiveMQ.rest.primaryQueueCount();
 
